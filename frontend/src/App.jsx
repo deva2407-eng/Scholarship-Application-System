@@ -14,6 +14,7 @@ import ApplyScholarship from "./pages/ApplyScholarship";
 import MyApplications from "./pages/MyApplications";
 import AdminApplications from "./pages/AdminApplications";
 import AdminLayout from "./layouts/AdminLayout";
+import AdminLogin from "./pages/AdminLogin";
 
 import AdminDashboard from "./pages/AdminDashboard";
 import AdminScholarships from "./pages/AdminScholarships";
@@ -40,6 +41,10 @@ function App() {
                     path="/register"
                     element={<Register />}
                 />
+                 <Route
+                 path="/admin-login"
+                  element={<AdminLogin />}
+                  />
 
 
                 {/* ========================= */}

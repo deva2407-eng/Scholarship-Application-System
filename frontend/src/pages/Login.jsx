@@ -24,7 +24,6 @@ function Login() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         setError("");
         setLoading(true);
 
@@ -52,21 +51,19 @@ function Login() {
                 return;
             }
 
-            // Save authentication information
+            if (data.user.role !== "student") {
+                setError("Please use the appropriate login page for your account.");
+                return;
+            }
+
             localStorage.setItem("token", data.token);
             localStorage.setItem("user", JSON.stringify(data.user));
 
-            // Redirect according to the user's role
-            if (data.user.role === "admin") {
-                navigate("/admin", { replace: true });
-            } else {
-                navigate("/student", { replace: true });
-            }
+            navigate("/student", { replace: true });
 
         } catch (error) {
             console.error("Login error:", error);
             setError("Unable to connect to the server. Please try again.");
-
         } finally {
             setLoading(false);
         }
@@ -75,10 +72,7 @@ function Login() {
     return (
         <div className="auth-page">
             <div className="auth-card">
-
-                <div className="auth-logo">
-                    🎓
-                </div>
+                <div className="auth-logo">🎓</div>
 
                 <h1>Welcome Back</h1>
 
@@ -87,18 +81,12 @@ function Login() {
                 </p>
 
                 {error && (
-                    <div className="auth-error">
-                        {error}
-                    </div>
+                    <div className="auth-error">{error}</div>
                 )}
 
                 <form onSubmit={handleSubmit} className="auth-form">
-
                     <div className="form-field">
-                        <label htmlFor="email">
-                            Email Address
-                        </label>
-
+                        <label htmlFor="email">Email Address</label>
                         <input
                             id="email"
                             type="email"
@@ -112,10 +100,7 @@ function Login() {
                     </div>
 
                     <div className="form-field">
-                        <label htmlFor="password">
-                            Password
-                        </label>
-
+                        <label htmlFor="password">Password</label>
                         <input
                             id="password"
                             type="password"
@@ -135,16 +120,17 @@ function Login() {
                     >
                         {loading ? "Signing in..." : "Sign In"}
                     </button>
-
                 </form>
 
                 <p className="auth-footer">
                     Don't have an account?{" "}
-                    <Link to="/register">
-                        Create an account
-                    </Link>
+                    <Link to="/register">Create an account</Link>
                 </p>
 
+                <p className="auth-footer">
+                    Are you an administrator?{" "}
+                    <Link to="/admin-login">Admin Login</Link>
+                </p>
             </div>
         </div>
     );
