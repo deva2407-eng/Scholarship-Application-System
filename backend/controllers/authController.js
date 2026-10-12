@@ -1,3 +1,4 @@
+```javascript
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -5,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Register a new user
 const registerUser = async (req, res) => {
     try {
-        const { name, email, password } = req.body;
+        const { name, email, password, gpa } = req.body;
 
         // Check if all required fields are provided
         if (!name || !email || !password) {
@@ -15,7 +16,11 @@ const registerUser = async (req, res) => {
         }
 
         // Check if user already exists
-        const existingUser = await User.findOne({ email });
+        const normalizedEmail = email.trim().toLowerCase();
+
+        const existingUser = await User.findOne({
+            email: normalizedEmail
+        });
 
         if (existingUser) {
             return res.status(400).json({
@@ -23,18 +28,36 @@ const registerUser = async (req, res) => {
             });
         }
 
+        // Validate GPA if provided
+        let studentGpa = 0;
+
+        if (gpa !== undefined && gpa !== null && gpa !== "") {
+            studentGpa = Number(gpa);
+
+            if (
+                !Number.isFinite(studentGpa) ||
+                studentGpa < 0 ||
+                studentGpa > 10
+            ) {
+                return res.status(400).json({
+                    message: "GPA must be a number between 0 and 10"
+                });
+            }
+        }
+
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
+        // Create user with GPA
         const user = await User.create({
-            name,
-            email,
-            password: hashedPassword
+            name: name.trim(),
+            email: normalizedEmail,
+            password: hashedPassword,
+            gpa: studentGpa
         });
 
         // Send response
-        res.status(201).json({
+        return res.status(201).json({
             message: "User registered successfully",
             user: {
                 id: user._id,
@@ -48,7 +71,13 @@ const registerUser = async (req, res) => {
     } catch (error) {
         console.error("Registration error:", error.message);
 
-        res.status(500).json({
+        if (error.code === 11000) {
+            return res.status(400).json({
+                message: "User already exists"
+            });
+        }
+
+        return res.status(500).json({
             message: "Server error"
         });
     }
@@ -68,7 +97,11 @@ const loginUser = async (req, res) => {
         }
 
         // Find user by email
-        const user = await User.findOne({ email });
+        const normalizedEmail = email.trim().toLowerCase();
+
+        const user = await User.findOne({
+            email: normalizedEmail
+        });
 
         if (!user) {
             return res.status(401).json({
@@ -101,7 +134,7 @@ const loginUser = async (req, res) => {
         );
 
         // Send response
-        res.status(200).json({
+        return res.status(200).json({
             message: "Login successful",
             token,
             user: {
@@ -116,7 +149,7 @@ const loginUser = async (req, res) => {
     } catch (error) {
         console.error("Login error:", error.message);
 
-        res.status(500).json({
+        return res.status(500).json({
             message: "Server error"
         });
     }
@@ -128,3 +161,4 @@ module.exports = {
     registerUser,
     loginUser
 };
+```

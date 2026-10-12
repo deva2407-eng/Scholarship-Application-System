@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -7,7 +8,8 @@ function Register() {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
-        password: ""
+        password: "",
+        gpa: "8.5"
     });
 
     const [message, setMessage] = useState("");
@@ -22,7 +24,6 @@ function Register() {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         setMessage("");
         setLoading(true);
 
@@ -34,23 +35,23 @@ function Register() {
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(formData)
+                    body: JSON.stringify({
+                        ...formData,
+                        gpa: Number(formData.gpa)
+                    })
                 }
             );
 
             const data = await response.json();
 
             if (!response.ok) {
-                setMessage(data.message || "Registration failed");
+                setMessage(data.message || "Registration failed.");
                 return;
             }
 
             setMessage("Registration successful! Redirecting...");
 
-            setTimeout(() => {
-                navigate("/login");
-            }, 1000);
-
+            setTimeout(() => navigate("/login"), 1000);
         } catch (error) {
             console.error("Registration error:", error);
             setMessage("Unable to connect to the server.");
@@ -61,18 +62,13 @@ function Register() {
 
     return (
         <div className="auth-container">
-
             <div className="auth-card">
-
                 <h1>Scholarship Application System</h1>
-
                 <h2>Create Account</h2>
 
                 <form onSubmit={handleSubmit}>
-
                     <div className="form-group">
                         <label>Name</label>
-
                         <input
                             type="text"
                             name="name"
@@ -85,7 +81,6 @@ function Register() {
 
                     <div className="form-group">
                         <label>Email</label>
-
                         <input
                             type="email"
                             name="email"
@@ -98,7 +93,6 @@ function Register() {
 
                     <div className="form-group">
                         <label>Password</label>
-
                         <input
                             type="password"
                             name="password"
@@ -109,30 +103,32 @@ function Register() {
                         />
                     </div>
 
-                    <button
-                        type="submit"
-                        disabled={loading}
-                    >
+                    <div className="form-group">
+                        <label>GPA (0–10)</label>
+                        <input
+                            type="number"
+                            name="gpa"
+                            min="0"
+                            max="10"
+                            step="0.1"
+                            value={formData.gpa}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
+
+                    <button type="submit" disabled={loading}>
                         {loading ? "Creating account..." : "Register"}
                     </button>
-
                 </form>
 
-                {message && (
-                    <p className="message">
-                        {message}
-                    </p>
-                )}
+                {message && <p className="message">{message}</p>}
 
                 <p>
                     Already have an account?{" "}
-                    <Link to="/login">
-                        Login here
-                    </Link>
+                    <Link to="/login">Login here</Link>
                 </p>
-
             </div>
-
         </div>
     );
 }
