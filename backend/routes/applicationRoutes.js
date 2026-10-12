@@ -9,7 +9,7 @@ const {
     getMyApplications,
     getAllApplications,
     updateApplicationStatus
-} = require("../controllers/applicationController");
+} = require("../controllers/ApplicationController");
 
 const router = express.Router();
 
