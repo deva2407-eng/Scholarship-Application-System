@@ -1,7 +1,10 @@
+
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function Login() {
+    const navigate = useNavigate();
+
     const [formData, setFormData] = useState({
         email: "",
         password: ""
@@ -40,39 +43,29 @@ function Login() {
             const data = await response.json();
 
             if (!response.ok) {
-                setError(
-                    data.message || "Login failed."
-                );
+                setError(data.message || "Login failed.");
+                return;
+            }
+
+            if (!data.token || !data.user) {
+                setError("Login response is missing authentication information.");
                 return;
             }
 
             // Save authentication information
-            localStorage.setItem(
-                "token",
-                data.token
-            );
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("user", JSON.stringify(data.user));
 
-            localStorage.setItem(
-                "user",
-                JSON.stringify(data.user)
-            );
-
-            // Redirect according to user's role
+            // Redirect according to the user's role
             if (data.user.role === "admin") {
-                window.location.href = "/admin";
+                navigate("/admin", { replace: true });
             } else {
-                window.location.href = "/student";
+                navigate("/student", { replace: true });
             }
 
         } catch (error) {
-            console.error(
-                "Login error:",
-                error
-            );
-
-            setError(
-                "Unable to connect to the server."
-            );
+            console.error("Login error:", error);
+            setError("Unable to connect to the server. Please try again.");
 
         } finally {
             setLoading(false);
@@ -81,25 +74,17 @@ function Login() {
 
     return (
         <div className="auth-page">
-
             <div className="auth-card">
-
-                {/* Logo */}
 
                 <div className="auth-logo">
                     🎓
                 </div>
 
-                <h1>
-                    Welcome Back
-                </h1>
+                <h1>Welcome Back</h1>
 
                 <p className="auth-subtitle">
                     Sign in to your ScholarHub account
                 </p>
-
-
-                {/* Error */}
 
                 {error && (
                     <div className="auth-error">
@@ -107,16 +92,9 @@ function Login() {
                     </div>
                 )}
 
-
-                {/* Login Form */}
-
-                <form
-                    onSubmit={handleSubmit}
-                    className="auth-form"
-                >
+                <form onSubmit={handleSubmit} className="auth-form">
 
                     <div className="form-field">
-
                         <label htmlFor="email">
                             Email Address
                         </label>
@@ -128,14 +106,12 @@ function Login() {
                             value={formData.email}
                             onChange={handleChange}
                             placeholder="Enter your email"
+                            autoComplete="email"
                             required
                         />
-
                     </div>
 
-
                     <div className="form-field">
-
                         <label htmlFor="password">
                             Password
                         </label>
@@ -147,37 +123,29 @@ function Login() {
                             value={formData.password}
                             onChange={handleChange}
                             placeholder="Enter your password"
+                            autoComplete="current-password"
                             required
                         />
-
                     </div>
-
 
                     <button
                         type="submit"
                         className="auth-button"
                         disabled={loading}
                     >
-                        {loading
-                            ? "Signing in..."
-                            : "Sign In"}
+                        {loading ? "Signing in..." : "Sign In"}
                     </button>
 
                 </form>
 
-
-                {/* Register */}
-
                 <p className="auth-footer">
                     Don't have an account?{" "}
-
                     <Link to="/register">
                         Create an account
                     </Link>
                 </p>
 
             </div>
-
         </div>
     );
 }
