@@ -1,5 +1,4 @@
-const API_URL = "http://localhost:5001/api";
-
+const API_URL = "https://scholarship-application-system-lern.onrender.com/api";
 export const registerUser = async (userData) => {
     const response = await fetch(`${API_URL}/auth/register`, {
         method: "POST",
