@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const connectDB = async () => {
@@ -6,7 +7,10 @@ const connectDB = async () => {
             family: 4
         });
 
+        console.log("Connected cluster:", mongoose.connection.host);
+        console.log("Connected database:", mongoose.connection.name);
         console.log("MongoDB connected successfully!");
+
     } catch (error) {
         console.error("MongoDB connection failed:", error.message);
         process.exit(1);
