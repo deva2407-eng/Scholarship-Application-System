@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-const API_BASE_URL = "http://localhost:5001/api";
-const SERVER_BASE_URL = "http://localhost:5001";
+const API_BASE_URL = "https://scholarship-application-system-lern.onrender.com/api";
+const SERVER_BASE_URL = "http://https://scholarship-application-system-lern.onrender.com";
 
 function Icon({ name, size = 20 }) {
     const common = {

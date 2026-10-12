@@ -27,7 +27,7 @@ function Login() {
 
         try {
             const response = await fetch(
-                "http://localhost:5001/api/auth/login",
+                "https://scholarship-application-system-lern.onrender.com/api/auth/login",
                 {
                     method: "POST",
                     headers: {

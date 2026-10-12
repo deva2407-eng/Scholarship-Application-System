@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-const API = "http://localhost:5001/api";
+const API = "https://scholarship-application-system-lern.onrender.com/api";
 
 function Icon({ name, size = 20 }) {
     const paths = {

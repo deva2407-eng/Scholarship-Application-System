@@ -154,7 +154,7 @@ function AdminScholarships() {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:5001/api/scholarships",
+                "https://scholarship-application-system-lern.onrender.com/api/scholarships",
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -275,8 +275,8 @@ function AdminScholarships() {
             };
 
             const url = editingId
-                ? `http://localhost:5001/api/scholarships/${editingId}`
-                : "http://localhost:5001/api/scholarships";
+                ? `https://scholarship-application-system-lern.onrender.com/api/scholarships/${editingId}`
+                : "https://scholarship-application-system-lern.onrender.com/api/scholarships";
 
             const response = await fetch(url, {
                 method: editingId ? "PUT" : "POST",
@@ -328,7 +328,7 @@ function AdminScholarships() {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                `http://localhost:5001/api/scholarships/${id}`,
+                `https://scholarship-application-system-lern.onrender.com/api/scholarships/${id}`,
                 {
                     method: "DELETE",
                     headers: {

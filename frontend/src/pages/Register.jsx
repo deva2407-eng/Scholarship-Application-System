@@ -28,7 +28,7 @@ function Register() {
 
         try {
             const response = await fetch(
-                "http://localhost:5001/api/auth/register",
+                "https://scholarship-application-system-lern.onrender.com/api/auth/register",
                 {
                     method: "POST",
                     headers: {

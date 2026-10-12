@@ -100,7 +100,7 @@ function ApplyScholarship() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/scholarships/${scholarshipId}`,
+                        `https://scholarship-application-system-lern.onrender.com/api/scholarships/${scholarshipId}`,
                         {
                             headers: {
                                 Authorization:
@@ -194,7 +194,7 @@ function ApplyScholarship() {
 
                 const response =
                     await fetch(
-                        `http://localhost:5001/api/scholarships/${scholarshipId}/apply`,
+                        `https://scholarship-application-system-lern.onrender.com/api/scholarships/${scholarshipId}/apply`,
                         {
                             method: "POST",
 

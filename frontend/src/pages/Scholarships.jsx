@@ -84,7 +84,9 @@ function Scholarships() {
             const token = localStorage.getItem("token");
 
             const response = await fetch(
-                "http://localhost:5001/api/scholarships",
+                
+"https://scholarship-application-system-lern.onrender.com/api/scholarships",
+
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
